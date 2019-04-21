@@ -1,0 +1,10 @@
+.alert-error {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+.alert {
+    margin:10px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}
+

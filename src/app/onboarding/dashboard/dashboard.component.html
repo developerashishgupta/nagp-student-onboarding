@@ -1,0 +1,17 @@
+<!-- <nav mat-tab-nav-bar>
+  <mat-tab label="Onboarding Form">
+    <app-onboarding-form></app-onboarding-form>
+  </mat-tab>
+  <mat-tab label="List Students">
+    <app-student-list></app-student-list>
+  </mat-tab>
+</nav> -->
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+    [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+
+<router-outlet></router-outlet>

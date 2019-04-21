@@ -1,0 +1,14 @@
+<div class="students-list">
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select [(value)]="selectedCategory" (selectionChange)="categoryChange($event.value)">
+      <mat-option value="0">All</mat-option>
+      <mat-option value="1">Domestic</mat-option>
+      <mat-option value="2">International</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <input [(ngModel)]="searchText" placeholder="search text goes here">
+  <div *ngFor="let student of displayedStudents | filterStudent: searchText">
+    <app-student-list-card [student]="student" (deleteStudent)="deleteStudent($event)"></app-student-list-card>
+  </div>
+</div>
