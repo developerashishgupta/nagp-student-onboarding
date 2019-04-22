@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, NgForm } from "@angular/forms";
 
 
 @Component({
@@ -16,14 +16,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      userName: ['', Validators.required],
+      userName: ['', Validators.required, Validators.minLength(3)],
       password: ['', Validators.required]
     });
   }
 
-  login() {
+  onSubmit(form: NgForm) {
     const val = this.form.value;
-    if (val.userName && val.password) {
+    if (form.valid) {
       this.authService.login(val.userName, val.password); 
     }
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn, AbstractControl } from "@angular/forms";
 import { Student } from '../../shared/models/student.interface'
 import { StudentCategory } from '../../shared/enums/student-category-enum';
 import { StudentService } from '../../shared/services/student.service'
@@ -135,6 +135,13 @@ export class OnboardingFormComponent implements OnInit {
         this.form.disable();
       });
     
+  }
+
+  private forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const forbidden = nameRe.test(control.value);
+      return forbidden ? {'forbiddenName': {value: control.value}} : null;
+    };
   }
 }
 

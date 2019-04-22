@@ -1,6 +1,8 @@
 <mat-toolbar>
-  <span>On Boarding App</span>
-  {{username}}
-  <button mat-button (click)="logOut()">LogOut</button>
+  <div class="toolbar">On Boarding App
+  <span class="float-right">{{username}} | 
+  <button mat-button (click)="logOut()">LogOut</button></span>
+  <mat-icon class="mat-icon-rtl-mirror" svgIcon="thumb-up"></mat-icon>
+  </div>
 </mat-toolbar>
 
