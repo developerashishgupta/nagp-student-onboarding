@@ -15,24 +15,11 @@ export class StudentListComponent implements OnInit {
   constructor(private studentService: StudentService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.selectedCategory = "0";
+    this.selectedCategory = "All";
     this.students = this.displayedStudents = this.studentService.getStudentsList();
   }
 
-  categoryChange(category) {
-    if (category === 'All') {
-      this.displayedStudents = this.students;
-    } else {
-      this.displayedStudents = this.students.filter(student => student.category == category);
-    }
-
-  }
-
-  deleteStudent(studentId: number) {
-
-  }
-
-  openDialog(studentId: number): void {
+  openDeleteStudentDialog(studentId: number): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '250px'
     });
@@ -43,7 +30,6 @@ export class StudentListComponent implements OnInit {
             if (success)
               var i = this.students.findIndex(student => student.id === studentId);
             this.students.splice(i, 1);
-            this.categoryChange(this.selectedCategory);
           }
         )
       }

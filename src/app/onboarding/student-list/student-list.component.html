@@ -1,7 +1,7 @@
 <div class="students-list">
   <mat-form-field>
     <mat-label>Category</mat-label>
-    <mat-select [(value)]="selectedCategory" (selectionChange)="categoryChange($event.value)">
+    <mat-select [(value)]="selectedCategory">
       <mat-option value="All">All</mat-option>
       <mat-option value="Domestic">Domestic</mat-option>
       <mat-option value="International">International</mat-option>
@@ -12,7 +12,7 @@
     </mat-form-field>
   <!-- <mat-form-field><input mat-input formControlName="searchText" [(ngModel)]="searchText" placeholder="search text goes here"></mat-form-field> -->
   <br/>
-  <ng-container *ngFor="let student of displayedStudents | filterStudent: searchText">
-    <app-student-list-card [student]="student" (deleteStudent)="openDialog($event)"></app-student-list-card>
+  <ng-container *ngFor="let student of displayedStudents | categoryFilter:selectedCategory | filterStudent: searchText ">
+    <app-student-list-card [student]="student" (deleteStudent)="openDeleteStudentDialog($event)"></app-student-list-card>
   </ng-container>
 </div>

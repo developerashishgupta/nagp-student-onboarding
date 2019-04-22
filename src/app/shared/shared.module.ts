@@ -8,9 +8,10 @@ import { FilterStudentPipe } from './pipes/filter-student.pipe';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './services/in-memory-data.service';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { CategoryFilterPipe } from './pipes/category-filter/category-filter.pipe'
 
 @NgModule({
-  declarations: [HeaderComponent, PageNotFoundComponent,FilterStudentPipe, DeleteDialogComponent],
+  declarations: [HeaderComponent, PageNotFoundComponent,FilterStudentPipe, DeleteDialogComponent, CategoryFilterPipe],
   imports: [
     CommonModule,
     AngularMaterialModule,
@@ -18,7 +19,7 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
       InMemoryDataService, { dataEncapsulation: false }
     )
   ],
-  exports: [HeaderComponent,FilterStudentPipe],
+  exports: [HeaderComponent,FilterStudentPipe,CategoryFilterPipe],
   providers : [LocalStorageDataService],
   entryComponents: [DeleteDialogComponent]
 })
