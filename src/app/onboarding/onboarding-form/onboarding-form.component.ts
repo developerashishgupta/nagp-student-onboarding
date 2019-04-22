@@ -48,13 +48,13 @@ export class OnboardingFormComponent implements OnInit {
 
   createform(): void {
     this.form = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       category: ['', [Validators.required]],
       documents: new FormArray([]),
       dateOfBirth: [, [Validators.required]],
       fathersName: ['', [Validators.required]],
       mothersName: ['', [Validators.required]],
-      lastScore: ['', [Validators.required]],
+      lastScore: ['', [Validators.required, Validators.max(100), Validators.min(0)]],
     })
     this.documentsFormArrray = this.form.controls.documents as FormArray;
   }
@@ -137,12 +137,6 @@ export class OnboardingFormComponent implements OnInit {
     
   }
 
-  private forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} | null => {
-      const forbidden = nameRe.test(control.value);
-      return forbidden ? {'forbiddenName': {value: control.value}} : null;
-    };
-  }
 }
 
 

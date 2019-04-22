@@ -2,13 +2,14 @@
   <div class="login-container">
     <mat-form-field>
       <input class="username" name="userName" formControlName="userName" matInput placeholder="User Name">
+      <mat-error *ngIf="userName.invalid">User name must have length greater than 3.</mat-error> 
     </mat-form-field>
     <br />
     <mat-form-field>
       <input name="password" formControlName="password" type="password" matInput placeholder="Password">
     </mat-form-field>
     <div class="form-buttons login-btn">
-      <button mat-button class="button button-primary" type="submit">Login</button>
+      <button [disabled]="!loginForm.valid" mat-button class="button button-primary" type="submit">Login</button>
     </div>
   </div>
 </form>
