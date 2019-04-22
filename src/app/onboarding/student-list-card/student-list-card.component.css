@@ -1,7 +1,19 @@
-.student-card{
-    height: 30%;
-    width: 30%;
-    border: 2px solid black;
+mat-card{
+    margin: 10px;
     display: inline-block;
-    margin: 1%;
+    width: 25%;
+}
+.col-blue{
+    background-color: #0707f873;
+}
+.col-yellow{ 
+    background-color: #ffff0057;
+}
+.title{
+    font-size: 20px;
+    padding: 5px;
+}
+.info{
+    font-size: 15px;
+    padding: 5px;
 }

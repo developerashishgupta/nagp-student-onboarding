@@ -2,13 +2,17 @@
   <mat-form-field>
     <mat-label>Category</mat-label>
     <mat-select [(value)]="selectedCategory" (selectionChange)="categoryChange($event.value)">
-      <mat-option value="0">All</mat-option>
-      <mat-option value="1">Domestic</mat-option>
-      <mat-option value="2">International</mat-option>
+      <mat-option value="All">All</mat-option>
+      <mat-option value="Domestic">Domestic</mat-option>
+      <mat-option value="International">International</mat-option>
     </mat-select>
   </mat-form-field>
-  <input [(ngModel)]="searchText" placeholder="search text goes here">
-  <div *ngFor="let student of displayedStudents | filterStudent: searchText">
-    <app-student-list-card [student]="student" (deleteStudent)="deleteStudent($event)"></app-student-list-card>
-  </div>
+  <mat-form-field class="float-right">
+      <input matInput placeholder="Search student" [(ngModel)]="searchText" lenght="100">
+    </mat-form-field>
+  <!-- <mat-form-field><input mat-input formControlName="searchText" [(ngModel)]="searchText" placeholder="search text goes here"></mat-form-field> -->
+  <br/>
+  <ng-container *ngFor="let student of displayedStudents | filterStudent: searchText">
+    <app-student-list-card [student]="student" (deleteStudent)="openDialog($event)"></app-student-list-card>
+  </ng-container>
 </div>

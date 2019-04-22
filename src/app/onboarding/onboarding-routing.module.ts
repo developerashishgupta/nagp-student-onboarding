@@ -8,6 +8,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 const routes: Routes = [{
   path: '', component: DashboardComponent, canActivate: [AuthGuard],
   children: [
+    {path :'', redirectTo:'form', pathMatch:'full'},
     { path: 'form', component: OnboardingFormComponent },
     { path: 'editForm/:id', component: OnboardingFormComponent },
     { path: 'viewForm/:id', component: OnboardingFormComponent },

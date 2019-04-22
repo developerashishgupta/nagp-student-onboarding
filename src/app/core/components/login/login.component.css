@@ -1,5 +1,18 @@
-fieldset{
-    border: 1px solid;
-    width: 400px;
-    margin:auto;
-  }
+.login-container {position: relative;
+width: 32%;
+border: 1px solid black;
+box-shadow: 2px 2px grey;
+left: 33%;
+top: 200px;
+padding: 10px;
+}
+mat-form-field{
+    display: block;
+}
+.login-btn{
+    position: relative;
+    left:42%;
+}
+.username{
+    padding-top: 10px;
+}

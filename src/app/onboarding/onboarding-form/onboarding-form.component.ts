@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@ang
 import { Student } from '../../shared/models/student.interface'
 import { StudentCategory } from '../../shared/enums/student-category-enum';
 import { StudentService } from '../../shared/services/student.service'
-import { ActivatedRoute } from '@angular/router';
-import { IDocument } from '../../shared/models/document.interface'
+import { ActivatedRoute, Router } from '@angular/router';
+import { IDocument } from '../../shared/models/document.interface';
+import { DocumentService } from '../../shared/services/documents/document.service'
 
 @Component({
   selector: 'app-onboarding-form',
@@ -15,103 +16,126 @@ export class OnboardingFormComponent implements OnInit {
 
   form: FormGroup;
   student: Student;
-  studentCategories = StudentCategory;
-  categoryKeys: string[];
-  documents: FormArray;
+  categories: string[];
+  documentsFormArrray: FormArray;
   isEditMode: boolean = false;
   isViewMode: boolean = false;
   studentId: number;
   documentList: IDocument[];
   constructor(private formBuilder: FormBuilder, private studentService: StudentService,
-    private route: ActivatedRoute) {
-    this.categoryKeys = Object.keys(StudentCategory).filter(Number);
+    private route: ActivatedRoute, private documentService: DocumentService,private router: Router) {
+    this.categories = Object.keys(StudentCategory).filter(k => typeof StudentCategory[k as any] === "number"); 
   }
 
-ngOnInit() {
-  this.createform();
-  this.loadDocuments(StudentCategory.Domestic);
+  ngOnInit() {
+    this.createform();
 
-  this.route.paramMap.subscribe(params => {
-    this.studentId = +params.get('id');
+    this.route.paramMap.subscribe(params => {
+      this.studentId = +params.get('id');
 
-    if (this.studentId) {
-      if (this.route.snapshot.url[0].path === 'editForm') {
-        this.isEditMode = true;
-        this.getStudentDetails(this.studentId, true);
+      if (this.studentId) {
+        if (this.route.snapshot.url[0].path === 'editForm') {
+          this.isEditMode = true;
+          this.getStudentDetails(this.studentId, true);
+        }
+        else if (this.route.snapshot.url[0].path === 'viewForm') {
+          this.isViewMode = true;
+          this.getStudentDetails(this.studentId, false);
+        }
       }
-      else if (this.route.snapshot.url[0].path === 'viewForm') {
-        this.isViewMode = true;
-        this.getStudentDetails(this.studentId, false);
-      }
+    })
+  }
+
+  createform(): void {
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      documents: new FormArray([]),
+      dateOfBirth: [, [Validators.required]],
+      fathersName: ['', [Validators.required]],
+      mothersName: ['', [Validators.required]],
+      lastScore: ['', [Validators.required]],
+    })
+    this.documentsFormArrray = this.form.controls.documents as FormArray;
+  }
+
+  getDocuments(category:StudentCategory){
+   return  this.documentService.getDocuments(category);
+  }
+
+  setDocumentFormArray(category:StudentCategory){
+    this.getDocuments(category).subscribe(documents => {
+      this.documentList = documents;
+        this.loadDocuments(this.documentList);
+      });
+  }
+
+  loadDocuments(documents:IDocument[]): void {
+    while (this.documentsFormArrray.length !== 0) {
+      this.documentsFormArrray.removeAt(0)
     }
-  })
-}
-
-createform(): void {
-  this.form = this.formBuilder.group({
-    name: ['', [Validators.required]],
-    category: ['', [Validators.required]],
-    documents: new FormArray([]),
-    dateOfBirth: [, [Validators.required]],
-    fathersName: ['', [Validators.required]],
-    mothersName: ['', [Validators.required]],
-    lastScore: ['', [Validators.required]],
-  })
-}
-
-loadDocuments(studentCategory: StudentCategory): void {
-  this.documents = this.form.controls.documents as FormArray;
-  this.documents.push(this.formBuilder.control(''));
-  this.documents.push(this.formBuilder.control(''));
-  this.documents.push(this.formBuilder.control(''));
-  this.documents.push(this.formBuilder.control(''));
-}
-
-onboardButtonClicked(event: Event) {
-  if (this.isEditMode) {
-    this.studentService.updateStudent(this.studentId, this.form.value);
-  }
-  else {
-    this.studentService.onboardStudent(this.form.value);
+    documents.forEach(((item, index) => {
+      this.documentsFormArrray.push(this.formBuilder.control(''));
+    }));
   }
 
-}
+  onboardButtonClicked(event: Event) {
+    if (this.isEditMode) {
+      this.studentService.updateStudent(this.studentId, this.form.value);
+      this.router.navigate(['dashboard/list']);
+    }
+    else {
+      this.studentService.onboardStudent(this.form.value);
+      this.form.reset();
+    }
 
-getStudentDetails(studentId: Number, isEditMode: boolean) {
-  return this.studentService.getStudent(studentId).subscribe(
-    (student: Student) => {
-      if (isEditMode)
-        this.editStudent(student)
-      else
-        this.viewStudent(student)
-    },
-    (err: Error) => console.log(err))
-}
+  }
 
-editStudent(student: Student) {
-  this.form.patchValue({
-    name: student.name,
-    category: student.category,
-    documents: [true, false, false, false],
-    dateOfBirth: student.dateOfBirth,
-    fathersName: student.fathersName,
-    mothersName: student.mothersName,
-    lastScore: student.lastScore
-  })
-}
+  getStudentDetails(studentId: Number, isEditMode: boolean) {
+    return this.studentService.getStudent(studentId).subscribe(
+      (student: Student) => {
+        if (isEditMode)
+          this.editStudent(student)
+        else
+          this.viewStudent(student)
+      },
+      (err: Error) => console.log(err))
+  }
 
-viewStudent(student: Student){
-  this.form.setValue({
-    name: student.name,
-    category: student.category,
-    documents: [true, false, false, false],
-    dateOfBirth: student.dateOfBirth,
-    fathersName: student.fathersName,
-    mothersName: student.mothersName,
-    lastScore: student.lastScore
-  })
-  this.form.disable();
-}
+  editStudent(student: Student) {
+    this.getDocuments(student.category).subscribe(documents => {
+      this.documentList = documents;
+        this.loadDocuments(this.documentList);
+        this.form.patchValue({
+          name: student.name,
+          category: student.category,
+          documents: student.documents,
+          dateOfBirth: student.dateOfBirth,
+          fathersName: student.fathersName,
+          mothersName: student.mothersName,
+          lastScore: student.lastScore
+        })
+      });
+    
+  }
+
+  viewStudent(student: Student) {
+    this.getDocuments(student.category).subscribe(documents => {
+      this.documentList = documents;
+        this.loadDocuments(this.documentList);
+        this.form.setValue({
+          name: student.name,
+          category: student.category,
+          documents: student.documents,
+          dateOfBirth: student.dateOfBirth,
+          fathersName: student.fathersName,
+          mothersName: student.mothersName,
+          lastScore: student.lastScore
+        })
+        this.form.disable();
+      });
+    
+  }
 }
 
 

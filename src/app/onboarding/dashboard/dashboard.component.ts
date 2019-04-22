@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.navigate(['./dashboard/form']);
     this.router.events.subscribe((res) => {
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.path === '.' + this.router.url));
     });

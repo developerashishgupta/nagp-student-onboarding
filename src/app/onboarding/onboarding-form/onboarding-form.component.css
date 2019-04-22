@@ -1,7 +1,19 @@
 .form-field-container{
-    display: flex;
-    flex-direction: column;
     min-width: 150px;
     max-width: 500px;
     width: 100%;
+    position: relative;
+    left: 35%;
+    top: 4vh;
+}
+.form-field-container>div{
+      display: flex;
+      flex-direction: column;
+  }
+    
+
+  .document-label{
+    color: #979696;
+    font-size: 16px;
+    font-family: sans-serif
   }

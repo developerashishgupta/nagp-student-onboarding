@@ -1,33 +1,37 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../models/user';
 import { LocalStorageDataService } from '../../shared/services/data-local-storage.service'
+import {  Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthenticationService {
-    currentUser: IUser;
-    redirectUrl: string;
 
-    constructor(private localStorageDataService: LocalStorageDataService) { }
+    redirectUrl: string = '/dashboard';
+
+    constructor(private localStorageDataService: LocalStorageDataService, private router:Router) { }
 
     isLoggedIn(): boolean {
         if (this.localStorageDataService.getItemFromLocalStorage('currentUser')) {
             return true;
         }
-        return true;
+        return false;
     }
 
-    login(userName: string, password: string): boolean {
+    login(userName: string, password: string) {
         if (!userName || !password) {
-            return false;
+            return;
         }
        this.localStorageDataService.setItemToLocalStorage('currentUser',userName);
-       return  true;
-    
+       this.router.navigateByUrl(this.redirectUrl);
+    }
+
+    getLoggedInUser(){
+        return this.localStorageDataService.getItemFromLocalStorage('currentUser');
     }
 
     logout(): void {
+        this.redirectUrl='/dashboard';
         this.localStorageDataService.removeItemFromLocalStorage('currentUser')
     }
 }
