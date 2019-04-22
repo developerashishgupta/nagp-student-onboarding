@@ -12,6 +12,7 @@ export class StudentListComponent implements OnInit {
   selectedCategory;
   displayedStudents: Student[];
   students: Student[];
+  searchText:string;
   constructor(private studentService: StudentService, public dialog: MatDialog) { }
 
   ngOnInit() {

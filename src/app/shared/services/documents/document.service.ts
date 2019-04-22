@@ -11,7 +11,7 @@ export class DocumentService {
   private documentsUrl = 'api/';  // URL to web api
   constructor(private http: HttpClient) { }
 
-  getDocuments (category:StudentCategory): Observable<any> {
+  getDocuments (category:string): Observable<any> {
     return this.http.get<any>(this.documentsUrl + category);
   }
 }

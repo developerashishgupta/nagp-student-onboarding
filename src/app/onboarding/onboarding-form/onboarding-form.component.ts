@@ -59,11 +59,11 @@ export class OnboardingFormComponent implements OnInit {
     this.documentsFormArrray = this.form.controls.documents as FormArray;
   }
 
-  getDocuments(category:StudentCategory){
+  getDocuments(category:string){
    return  this.documentService.getDocuments(category);
   }
 
-  setDocumentFormArray(category:StudentCategory){
+  setDocumentFormArray(category:string){
     this.getDocuments(category).subscribe(documents => {
       this.documentList = documents;
         this.loadDocuments(this.documentList);

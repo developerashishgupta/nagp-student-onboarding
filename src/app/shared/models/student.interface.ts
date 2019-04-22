@@ -3,7 +3,7 @@ import { DocumentType } from '../enums/document-type.enum'
 export interface Student {
     id?: number,
     name: string,
-    category: StudentCategory,
+    category: string,
     documents: DocumentType[],
     dateOfBirth: Date,
     fathersName: string,
